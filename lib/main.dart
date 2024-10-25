@@ -1,5 +1,7 @@
 // ignore_for_file: unrelated_type_equality_checks
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 void main() {
@@ -36,6 +38,13 @@ class MacDockState extends State<MacDock> {
     Icons.photo,
   ];
   int? draggingIndex;
+  late int length;
+
+  @override
+  void initState() {
+    length = iconItems.length;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,9 +52,9 @@ class MacDockState extends State<MacDock> {
       child: Container(
         height: 70,
         // width: MediaQuery.of(context).size.width * 0.9,
-        width: iconItems.length * 70,
+        width: length * 72,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(12),
           color: Colors.black12,
         ),
         padding: const EdgeInsets.all(2),
@@ -67,20 +76,23 @@ class MacDockState extends State<MacDock> {
                   onDragStarted: () {
                     setState(() {
                       draggingIndex = index;
+                      length -= 1;
                     });
                   },
                   onDraggableCanceled: (velocity, offset) {
                     setState(() {
                       draggingIndex = null;
+                      length += 1;
                     });
                   },
                   onDragCompleted: () {
                     setState(() {
                       draggingIndex = null;
+                      length += 1;
                     });
                   },
                   childWhenDragging: Container(
-                    width: 50,
+                    width: 2,
                     height: 50,
                     // margin: EdgeInsets.symmetric(horizontal: 8),
                     margin: const EdgeInsets.all(8),
@@ -94,9 +106,7 @@ class MacDockState extends State<MacDock> {
                     child: renderDockItem(index, isDragging: true),
                   ),
                   // child: renderDockItem(index),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 900),
-                    curve: Curves.bounceOut,
+                  child: Container(
                     width: 50,
                     height: 50,
                     margin: const EdgeInsets.all(8),
